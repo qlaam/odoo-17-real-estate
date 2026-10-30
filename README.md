@@ -2,7 +2,7 @@
 
 [![Odoo 17 integration](https://github.com/qlaam/odoo-17-real-estate/actions/workflows/ci.yml/badge.svg)](https://github.com/qlaam/odoo-17-real-estate/actions/workflows/ci.yml)
 
-A learning portfolio for Odoo 17 Community, organized into `estate` (real estate management) and `estate_account` (accounting integration). This is an educational project; runtime verification is still required.
+A learning portfolio for Odoo 17 Community, organized into `estate` (real estate management) and `estate_account` (accounting integration). Both addons install successfully and the 32 portfolio tests pass in GitHub CI and native PostgreSQL verification.
 
 ## Learning attribution
 
@@ -12,7 +12,7 @@ The portfolio author learned from **Muhammad Nasser's Arabic Odoo 17 Development
 
 See the [tutorial notes](docs/TUTORIAL.md) and [demo walkthrough](docs/DEMO.md) for the accompanying learning and demonstration guides.
 
-The intended tutorial scope is summarized below. Check the addon source and test results to establish what currently works; this table is not a claim that every exercise is complete.
+The implemented tutorial topics are summarized below. See the [chapter mapping](docs/TUTORIAL.md), [demonstration walkthrough](docs/DEMO.md), and [verification evidence](docs/VERIFICATION.md).
 
 | Area | Portfolio scope |
 | --- | --- |
@@ -66,7 +66,7 @@ docker compose run --rm odoo odoo -d estate_test_001 -i estate,estate_account --
 
 The essential test command is `odoo -i estate,estate_account --test-enable --test-tags /estate,/estate_account --stop-after-init --without-demo=all`; Compose supplies database connectivity and the extra addon mount. The tags select the portfolio tests, excluding unrelated upstream test suites. Inspect the final Odoo test summary and failures, not just container startup. CI runs the static checker and this integration command against a fresh Compose project, checks that an Odoo test summary exists and reports tests, and uploads logs even on failure.
 
-**Verification status:** no passing integration-test result is claimed here. The static checker checks syntax and manifest structure only; it does not install Odoo, validate view semantics, exercise access rules, or prove business behavior. No screenshots are included and no visual verification is claimed.
+**Verification status (30 October 2026):** [GitHub CI passed](https://github.com/qlaam/odoo-17-real-estate/actions/runs/41077253111) with 32 tests, zero failures and zero errors. Native Windows/PostgreSQL verification also passed all 32 tests; a separate core-only run passed 21 tests with accounting uninstalled. Static checks pass. See [verification evidence](docs/VERIFICATION.md) for environment details and limits. No browser walkthrough, PDF rendering or screenshots are claimed.
 
 ## Optional Odoo source checkout
 
