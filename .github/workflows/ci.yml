@@ -29,7 +29,7 @@ jobs:
           set -euo pipefail
           mkdir -p artifacts
           docker compose up -d --wait db
-          docker compose run --rm -T odoo odoo -d estate_ci -i estate,estate_account --test-enable --stop-after-init --without-demo=all 2>&1 | tee artifacts/odoo-tests.log
+          docker compose run --rm -T odoo odoo -d estate_ci -i estate,estate_account --test-enable --test-tags /estate,/estate_account --stop-after-init --without-demo=all 2>&1 | tee artifacts/odoo-tests.log
           python scripts/check_test_log.py artifacts/odoo-tests.log
       - name: Collect service logs
         if: always()

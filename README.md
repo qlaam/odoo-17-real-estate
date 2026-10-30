@@ -61,10 +61,10 @@ Use a fresh database name for each test run (replace `estate_test_001` if it alr
 
 ```sh
 docker compose up -d db
-docker compose run --rm odoo odoo -d estate_test_001 -i estate,estate_account --test-enable --stop-after-init --without-demo=all
+docker compose run --rm odoo odoo -d estate_test_001 -i estate,estate_account --test-enable --test-tags /estate,/estate_account --stop-after-init --without-demo=all
 ```
 
-The essential test command is `odoo -i estate,estate_account --test-enable --stop-after-init --without-demo=all`; Compose supplies database connectivity and the extra addon mount. Inspect the final Odoo test summary and failures, not just container startup. CI runs the static checker and this integration command against a fresh Compose project, checks that an Odoo test summary exists and reports tests, and uploads logs even on failure.
+The essential test command is `odoo -i estate,estate_account --test-enable --test-tags /estate,/estate_account --stop-after-init --without-demo=all`; Compose supplies database connectivity and the extra addon mount. The tags select the portfolio tests, excluding unrelated upstream test suites. Inspect the final Odoo test summary and failures, not just container startup. CI runs the static checker and this integration command against a fresh Compose project, checks that an Odoo test summary exists and reports tests, and uploads logs even on failure.
 
 **Verification status:** no passing integration-test result is claimed here. The static checker checks syntax and manifest structure only; it does not install Odoo, validate view semantics, exercise access rules, or prove business behavior. No screenshots are included and no visual verification is claimed.
 
@@ -82,7 +82,7 @@ On PowerShell, create the directory with `New-Item -ItemType Directory -Force wo
 For a source-based run, follow the official [Odoo 17 source installation instructions](https://www.odoo.com/documentation/17.0/administration/on_premise/source.html) for system dependencies, PostgreSQL and a Python environment. From the workspace root, after configuring database credentials:
 
 ```sh
-python work/odoo/odoo-bin --addons-path=work/odoo/addons,outputs/odoo17-estate-portfolio/addons -d estate_test_source -i estate,estate_account --test-enable --stop-after-init --without-demo=all
+python work/odoo/odoo-bin --addons-path=work/odoo/addons,outputs/odoo17-estate-portfolio/addons -d estate_test_source -i estate,estate_account --test-enable --test-tags /estate,/estate_account --stop-after-init --without-demo=all
 ```
 
 Docker Compose does not require a source checkout. The `17.0` branch and image tags can change over time; record the source commit and image digests when publishing reproducible test evidence.
