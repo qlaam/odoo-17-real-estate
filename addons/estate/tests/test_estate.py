@@ -174,7 +174,7 @@ class TestEstate(TransactionCase):
             with self.subTest(values=values), mute_logger("odoo.sql_db"), self.assertRaises(IntegrityError), self.cr.savepoint():
                 self.Property.create(dict({"name": "Invalid", "expected_price": 100000}, **values))
         for values in ({"price": 0}, {"price": -1}, {"price": 95000, "validity": -1}):
-            with self.subTest(values=values), mute_logger("odoo.sql_db"), self.assertRaises((IntegrityError, ValidationError)), self.cr.savepoint():
+            with self.subTest(values=values), mute_logger("odoo.sql_db"), self.assertRaises(IntegrityError), self.cr.savepoint():
                 self.Offer.create(dict({"partner_id": self.buyer.id, "property_id": self.property.id}, **values))
 
     def test_unique_type_and_tag_names(self):
