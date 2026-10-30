@@ -1,5 +1,7 @@
 # Odoo 17 Real Estate Portfolio
 
+[![Odoo 17 integration](https://github.com/qlaam/odoo-17-real-estate/actions/workflows/ci.yml/badge.svg)](https://github.com/qlaam/odoo-17-real-estate/actions/workflows/ci.yml)
+
 A learning portfolio for Odoo 17 Community, organized into `estate` (real estate management) and `estate_account` (accounting integration). This is an educational project; runtime verification is still required.
 
 ## Learning attribution

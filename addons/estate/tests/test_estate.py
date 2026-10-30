@@ -8,6 +8,8 @@ from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tests import Form, TransactionCase, tagged
 from odoo.tools import mute_logger
 
+from ..models.estate_property import EstateProperty
+
 
 @tagged("post_install", "-at_install")
 class TestEstate(TransactionCase):
@@ -105,12 +107,12 @@ class TestEstate(TransactionCase):
         self.assertEqual(self.property.buyer_id, self.buyer)
         self.assertEqual(self.property.selling_price, offer.price)
         self.assertEqual(self.property.state, "offer_accepted")
-        self.assertTrue(self.property.action_sold())
+        self.assertTrue(EstateProperty.action_sold(self.property))
         self.assertEqual(self.property.state, "sold")
         with self.assertRaises(UserError):
             self.property.action_cancel()
         with self.assertRaises(UserError):
-            self.property.action_sold()
+            EstateProperty.action_sold(self.property)
 
     def test_only_one_offer_accepted(self):
         first = self._offer(90000)
@@ -134,7 +136,7 @@ class TestEstate(TransactionCase):
     def test_cancellation_and_unavailable_offers(self):
         self.property.action_cancel()
         with self.assertRaises(UserError):
-            self.property.action_sold()
+            EstateProperty.action_sold(self.property)
         with self.assertRaises(UserError):
             self._offer()
         other = self.Property.create({"name": "Accepted", "expected_price": 100000})
@@ -144,7 +146,7 @@ class TestEstate(TransactionCase):
 
     def test_sale_requires_accepted_offer(self):
         with self.assertRaises(UserError):
-            self.property.action_sold()
+            EstateProperty.action_sold(self.property)
 
     def test_selling_price_threshold(self):
         with self.assertRaises(ValidationError), self.cr.savepoint():
