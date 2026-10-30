@@ -1,0 +1,48 @@
+name: Odoo 17 integration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      COMPOSE_PROJECT_NAME: estate-ci-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Check addon sources
+        run: python scripts/verify.py
+      - name: Validate Compose configuration
+        run: docker compose config --quiet
+      - name: Install addons and run integration tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          docker compose up -d --wait db
+          docker compose run --rm -T odoo odoo -d estate_ci -i estate,estate_account --test-enable --stop-after-init --without-demo=all 2>&1 | tee artifacts/odoo-tests.log
+          python scripts/check_test_log.py artifacts/odoo-tests.log
+      - name: Collect service logs
+        if: always()
+        run: |
+          mkdir -p artifacts
+          docker compose logs --no-color > artifacts/compose.log 2>&1
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odoo-test-logs
+          path: artifacts/
+          if-no-files-found: warn
+      - name: Clean up isolated CI services
+        if: always()
+        run: docker compose down --volumes --remove-orphans

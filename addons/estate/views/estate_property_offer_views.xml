@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="estate_property_offer_view_tree" model="ir.ui.view">
+        <field name="name">estate.property.offer.tree</field>
+        <field name="model">estate.property.offer</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" decoration-success="status == 'accepted'" decoration-danger="status == 'refused'">
+                <field name="price"/>
+                <field name="partner_id"/>
+                <field name="property_id" optional="hide"/>
+                <field name="validity"/>
+                <field name="date_deadline"/>
+                <field name="status"/>
+                <button name="action_accept" type="object" icon="fa-check" title="Accept offer" invisible="status"/>
+                <button name="action_refuse" type="object" icon="fa-times" title="Refuse offer" invisible="status"/>
+            </tree>
+        </field>
+    </record>
+    <record id="estate_property_offer_view_form" model="ir.ui.view">
+        <field name="name">estate.property.offer.form</field>
+        <field name="model">estate.property.offer</field>
+        <field name="arch" type="xml">
+            <form string="Offer">
+                <header>
+                    <button name="action_accept" type="object" string="Accept" class="oe_highlight" invisible="status"/>
+                    <button name="action_refuse" type="object" string="Refuse" invisible="status"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet><group>
+                    <field name="property_id" readonly="id"/>
+                    <field name="partner_id" readonly="status"/>
+                    <field name="price" readonly="status"/>
+                    <field name="validity"/>
+                    <field name="date_deadline"/>
+                </group></sheet>
+            </form>
+        </field>
+    </record>
+    <record id="estate_property_offer_action" model="ir.actions.act_window">
+        <field name="name">Offers</field>
+        <field name="res_model">estate.property.offer</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_estate_property_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2><span t-field="o.name"/></h2>
+                <p t-field="o.description"/>
+                <table class="table table-sm">
+                    <tbody>
+                        <tr><th>Property Type</th><td><span t-field="o.property_type_id"/></td><th>Postcode</th><td><span t-field="o.postcode"/></td></tr>
+                        <tr><th>Available From</th><td><span t-field="o.date_availability"/></td><th>Status</th><td><span t-field="o.state"/></td></tr>
+                        <tr><th>Expected Price</th><td><span t-field="o.expected_price"/></td><th>Selling Price</th><td><span t-field="o.selling_price"/></td></tr>
+                        <tr><th>Bedrooms</th><td><span t-field="o.bedrooms"/></td><th>Total Area (sqm)</th><td><span t-field="o.total_area"/></td></tr>
+                        <tr><th>Salesperson</th><td><span t-field="o.salesperson_id"/></td><th>Buyer</th><td><span t-field="o.buyer_id"/></td></tr>
+                    </tbody>
+                </table>
+                <t t-if="o.offer_ids">
+                    <h3>Offers</h3>
+                    <table class="table table-sm">
+                        <thead><tr><th>Buyer</th><th>Price</th><th>Deadline</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="o.offer_ids" t-as="offer">
+                                <td><span t-field="offer.partner_id"/></td>
+                                <td><span t-field="offer.price"/></td>
+                                <td><span t-field="offer.date_deadline"/></td>
+                                <td><span t-field="offer.status"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+                <p t-else="">No offers received.</p>
+            </div>
+        </t>
+    </template>
+    <template id="report_estate_property">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="estate.report_estate_property_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>
